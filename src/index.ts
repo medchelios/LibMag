@@ -1,10 +1,13 @@
 import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
-
-dotenv.config();
+import {port} from './config';
+import {initializeDB} from './data-source'
 
 const app: Express = express();
-const port = process.env.PORT || 7000;
+
+// initializeDB()
+
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
