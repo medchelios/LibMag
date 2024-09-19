@@ -1,0 +1,35 @@
+{
+  "name": "libmag",
+  "version": "1.0.0",
+  "description": "a comprehensive library management system",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrAzuka/LibMag.git"
+  },
+  "author": "MrAzuka",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MrAzuka/LibMag/issues"
+  },
+  "homepage": "https://github.com/MrAzuka/LibMag#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.5.5",
+    "nodemon": "^3.1.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  }
+}
