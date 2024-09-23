@@ -4,10 +4,10 @@ import {
     IsDate
 } from "class-validator"
 
-@Entity()
-export class User {
+@Entity("user")
+export class UserEntity {
     @PrimaryGeneratedColumn("uuid")
-    user_id!: number
+    user_id!: string
 
     @Column()
     username!: string

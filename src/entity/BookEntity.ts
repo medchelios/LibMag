@@ -1,13 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
-import {
-    IsEmail,
-    IsDate
-} from "class-validator"
 
-@Entity()
-export class User {
-    @PrimaryGeneratedColumn()
-    book_id!: number
+@Entity("book")
+export class BookEntity {
+    @PrimaryGeneratedColumn("uuid")
+    book_id!: string
 
     @Column()
     title!: string
