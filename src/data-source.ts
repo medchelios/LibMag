@@ -1,6 +1,10 @@
 import "reflect-metadata";
 import {DataSource} from "typeorm";
 import {dbHost,dbName,dbPassword,dbPort,dbUsername} from "./config"
+import { UserEntity } from "./entity/UserEntity";
+import { BookEntity } from "./entity/BookEntity";
+import { BorrowedBookEntity } from "./entity/BorrowBookEntity";
+import { FinesEntity } from "./entity/FinesEntity";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -11,7 +15,7 @@ export const AppDataSource = new DataSource({
     database: dbName,
     synchronize: true,
     logging: true,
-    entities: [__dirname + "/entity/*{.js,.ts}"]
+    entities: [UserEntity,BookEntity, BorrowedBookEntity, FinesEntity]
 })
 
 export const initializeDB = async() => {

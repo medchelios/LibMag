@@ -5,8 +5,8 @@ import {BorrowedBookEntity} from "./BorrowBookEntity"
 import {DecimalTransformer, DecimalToString} from "../utils/DecimalConverter"
 import Decimal from "decimal.js"
 
-@Entity()
-export class Fines {
+@Entity("fines")
+export class FinesEntity {
     @PrimaryGeneratedColumn("uuid")
     fine_id!: string
 
