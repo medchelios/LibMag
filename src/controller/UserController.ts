@@ -1,0 +1,81 @@
+import { UserEntity } from "../entity/UserEntity"
+import { AppDataSource } from "../data-source"
+import { Response, Request } from "express"
+import { salt,jwtSecretKey } from "../config"
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+
+const userRepository = AppDataSource.getRepository(UserEntity)
+
+export const UserSignUp = async (req: Request, res: Response) => {
+    try {
+        const { username, email, password } = req.body
+
+        // Ensure you are using body parsing middleware
+        if (!username || !email || !password) {
+            return res.status(400).json({ success: false, message: "User fields are required." });
+        }
+        // Check if user is already in the system
+        const isUserExists = await userRepository.findOne({
+            where: {
+                email: email
+            }
+        })
+        if (isUserExists) { return res.status(400).json({ success: false, message: "User already exists." }); }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, salt)
+        const newUser = userRepository.create({
+            email: email,
+            password: hashedPassword
+        })
+        const saveUser = await userRepository.save(newUser)
+
+        return res.status(201).json({ success: true, message: "Signup success." })
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "An error occurred." });
+    }
+}
+
+export const UserLogin = async (req: Request, res: Response) => {
+    try {
+        const { userID, password } = req.body
+
+        // Ensure you are using body parsing middleware
+        if (!userID || !password) {
+            return res.status(400).json({ success: false, message: "Email and password are required." });
+        }
+        // Check if user is already in the system with either username or email
+        const isUserExists = await userRepository.findOne({
+            select: { email: true, username: true, password: true }, where: {
+                email: userID
+            }
+        }) || await userRepository.findOne({
+            select: { email: true, username: true, password: true }, where: {
+                username: userID
+            }
+        })
+        if (!isUserExists) { return res.status(400).json({ success: false, message: "User does not exist." }); }
+
+        // password match check
+        const isHashedPassword = bcrypt.compare(password, isUserExists.password)
+
+        if (!isHashedPassword) {return res.status(400).json({success: false, message: "wrong password or userid" })}
+
+        // create jwt token
+        let user = {id: isUserExists.user_id, email: isUserExists.email, username:isUserExists.username}
+        const token = jwt.sign(user, jwtSecretKey, { expiresIn: '30m'});
+
+        return res.status(200).json({
+            success: true,
+            message: "Login Success",
+            token: token
+        })
+          
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "An error occurred." });
+    }
+}
