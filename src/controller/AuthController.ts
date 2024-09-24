@@ -26,8 +26,10 @@ export const UserSignUp = async (req: Request, res: Response) => {
         // Hash password
         const hashedPassword = await bcrypt.hash(password, salt)
         const newUser = userRepository.create({
+            username: username,
             email: email,
-            password: hashedPassword
+            password: hashedPassword,
+            sign_up_date: new Date()
         })
         const saveUser = await userRepository.save(newUser)
 
@@ -41,20 +43,20 @@ export const UserSignUp = async (req: Request, res: Response) => {
 
 export const UserLogin = async (req: Request, res: Response) => {
     try {
-        const { userID, password } = req.body
+        const { userid, password } = req.body
 
         // Ensure you are using body parsing middleware
-        if (!userID || !password) {
-            return res.status(400).json({ success: false, message: "Email and password are required." });
+        if (!userid || !password) {
+            return res.status(400).json({ success: false, message: "userid and password are required." });
         }
         // Check if user is already in the system with either username or email
         const isUserExists = await userRepository.findOne({
             select: { email: true, username: true, password: true }, where: {
-                email: userID
+                email: userid
             }
         }) || await userRepository.findOne({
             select: { email: true, username: true, password: true }, where: {
-                username: userID
+                username: userid
             }
         })
         if (!isUserExists) { return res.status(400).json({ success: false, message: "User does not exist." }); }
