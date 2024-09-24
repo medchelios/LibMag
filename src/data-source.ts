@@ -15,7 +15,8 @@ export const AppDataSource = new DataSource({
     database: dbName,
     synchronize: true,
     logging: true,
-    entities: [UserEntity,BookEntity, BorrowedBookEntity, FinesEntity]
+    entities: [UserEntity,BookEntity, BorrowedBookEntity, FinesEntity],
+    migrations: ["./src/migrations/*.ts"]
 })
 
 export const initializeDB = async() => {

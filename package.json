@@ -6,7 +6,9 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "migration:run": "npx typeorm-ts-node-commonjs migration:run -d ./src/data-source.ts"
   },
   "repository": {
     "type": "git",
