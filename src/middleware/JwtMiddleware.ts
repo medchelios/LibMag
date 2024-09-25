@@ -32,19 +32,19 @@ export const VerifyJwtToken = async (req: Request, res: Response, next: NextFunc
         // Extract the token
         const token = authorization.split(" ")[1];
 
-        // Verify the token
-        const verifyNewToken = <any>jwt.verify(token, jwtSecretKey);
-
         // If verification fails, return an error
-        if (!verifyNewToken) {
+        if (!token) {
             return res.status(401).send({
                 success: false,
-                message: "Authorization error, Please login",
+                message: "Access Denied",
             });
         }
 
+        // Verify the token
+        const verifyNewToken = jwt.verify(token, jwtSecretKey);
+
         // Attach the decoded token (user info) to the request object
-        req.user = verifyNewToken;
+        req.body.user = verifyNewToken;
 
         // Proceed to the next middleware
         next();

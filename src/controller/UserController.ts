@@ -6,9 +6,7 @@ const userRepository = AppDataSource.getRepository(UserEntity)
 
 export const GetUserProfile = async (req: Request, res: Response) => {
     try {
-
-    const {id}: any = req.user
-        console.log(id)
+        const {id} = req.body.user
         const fetchUser = await userRepository.findOne({
             select:{
                 user_id: true,
@@ -34,8 +32,7 @@ export const GetUserProfile = async (req: Request, res: Response) => {
 
 export const UpdateUserProfile = async(req: Request, res: Response) => {
     try {
-        const {id}: any = req.user
-        console.log(id)
+        const {id} = req.body.user
         const fetchUser = await userRepository.exists({
             where:{
                 user_id: id
@@ -49,8 +46,10 @@ export const UpdateUserProfile = async(req: Request, res: Response) => {
         if (req.body.password){
             return res.status(400).json({ success: false, message: "cannot update password" });
         }
-        console.log({...req.body})
-        await userRepository.update({user_id:id}, {...req.body})
+        // Destructure to exclude `user` field
+        const { user, ...fieldsToUpdate } = req.body;
+
+        await userRepository.update({user_id:id}, fieldsToUpdate)
         return res.status(200).json({ success: true, message: "profile update success"});
 
     } catch (error) {
