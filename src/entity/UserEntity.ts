@@ -25,7 +25,21 @@ export class UserEntity {
     @IsEmail()
     email!: string
 
+    @Column({nullable: true})
+    address!: string
+
+    @Column({nullable:true})
+    contact!: string
+
+    @Column({
+        type: "enum",
+        enum: ["customer", "admin"],
+        default: "customer"
+    })
+    role!: Role 
+
     @Column()
     @IsDate()
     sign_up_date!: Date
 }
+export type Role = "customer"| "admin"

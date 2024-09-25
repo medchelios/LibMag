@@ -7,6 +7,7 @@ const userRepository = AppDataSource.getRepository(UserEntity)
 export const GetUserProfile = async (req: Request, res: Response) => {
     try {
         const {id} = req.body.user
+        // The select statement isn't scalable but it's the easiest solution
         const fetchUser = await userRepository.findOne({
             select:{
                 user_id: true,
@@ -14,6 +15,8 @@ export const GetUserProfile = async (req: Request, res: Response) => {
                 first_name: true,
                 last_name: true,
                 email: true,
+                // address:true,
+                // contact:true,
                 sign_up_date: true
             }, where:{
                 user_id: id
