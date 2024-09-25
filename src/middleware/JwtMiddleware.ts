@@ -2,15 +2,10 @@ import { Response, Request, NextFunction } from "express";
 import { jwtSecretKey } from "../config";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
-// TypeScript Property 'user' does not exist 
-// on type 'Request': You're assigning req.user = verifyNewToken, 
-// but TypeScript doesn’t know that user is a valid property on req. 
-// To fix this, you need to extend the Request type.
-
 // Extend the Request interface to include the 'user' property
 declare module "express-serve-static-core" {
     interface Request {
-        user?: string | JwtPayload; // Depending on what payload your JWT contains
+        user?: JwtPayload | string; // Assuming payload contains user information
     }
 }
 
@@ -38,7 +33,7 @@ export const VerifyJwtToken = async (req: Request, res: Response, next: NextFunc
         const token = authorization.split(" ")[1];
 
         // Verify the token
-        const verifyNewToken = jwt.verify(token, jwtSecretKey);
+        const verifyNewToken = <any>jwt.verify(token, jwtSecretKey);
 
         // If verification fails, return an error
         if (!verifyNewToken) {
@@ -54,7 +49,6 @@ export const VerifyJwtToken = async (req: Request, res: Response, next: NextFunc
         // Proceed to the next middleware
         next();
     } catch (error) {
-        // Handle JWT specific errors
         if (error instanceof jwt.TokenExpiredError) {
             return res.status(401).send({
                 success: false,
@@ -66,7 +60,7 @@ export const VerifyJwtToken = async (req: Request, res: Response, next: NextFunc
                 message: "Invalid token",
             });
         }
-
+    
         return res.status(500).send({
             success: false,
             message: "An internal server error occurred",
