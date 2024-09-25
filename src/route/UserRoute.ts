@@ -1,4 +1,4 @@
-import {GetUserProfile, UpdateUserProfile} from "../controller/UserController"
+import {GetUserProfile, UpdateUserProfile} from "../controller/users/UserController"
 import { Router } from "express"
 import { VerifyJwtToken } from "../middleware/JwtMiddleware";
 

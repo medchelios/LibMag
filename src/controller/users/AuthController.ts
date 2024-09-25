@@ -1,7 +1,7 @@
-import { UserEntity } from "../entity/UserEntity"
-import { AppDataSource } from "../data-source"
+import { UserEntity } from "../../entity/UserEntity"
+import { AppDataSource } from "../../data-source"
 import { Response, Request } from "express"
-import { salt,jwtSecretKey } from "../config"
+import { salt,jwtSecretKey } from "../../config"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 

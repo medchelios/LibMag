@@ -1,5 +1,5 @@
-import { UserEntity } from "../entity/UserEntity"
-import { AppDataSource } from "../data-source"
+import { UserEntity } from "../../entity/UserEntity"
+import { AppDataSource } from "../../data-source"
 import { Response, Request } from "express"
 
 const userRepository = AppDataSource.getRepository(UserEntity)
