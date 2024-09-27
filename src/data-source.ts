@@ -21,7 +21,7 @@ export const AppDataSource = new DataSource({
 
 export const initializeDB = async() => {
     try {
-        AppDataSource.initialize()
+        await AppDataSource.initialize()
         console.log("Data Source has been initialized!")
     } catch (error) {
         console.log(error)
