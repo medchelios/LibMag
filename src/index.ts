@@ -14,7 +14,7 @@ app.use(helmet())
 app.use(cors())
 app.use(morgan('dev'))
 
-app.use(routes)
+app.use("/api",routes)
 app.listen(port, async () => {
   await initializeDB()
   console.log(`[server]: Server is running at http://localhost:${port}`);
