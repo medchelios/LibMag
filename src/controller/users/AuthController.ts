@@ -67,7 +67,7 @@ export const UserLogin = async (req: Request, res: Response) => {
         if (!isHashedPassword) {return res.status(400).json({success: false, message: "wrong password or userid" })}
         
         // create jwt token
-        let user = {id: isUserExists.user_id, email: isUserExists.email, username:isUserExists.username, role: isUserExists.role}
+        let user = {id: isUserExists.user_id, role: isUserExists.role}
         const token = jwt.sign(user, jwtSecretKey, { expiresIn: '30m'});
         
         return res.status(200).json({
