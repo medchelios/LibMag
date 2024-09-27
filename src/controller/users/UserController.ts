@@ -15,8 +15,8 @@ export const GetUserProfile = async (req: Request, res: Response) => {
                 first_name: true,
                 last_name: true,
                 email: true,
-                // address:true,
-                // contact:true,
+                address:true,
+                contact:true,
                 sign_up_date: true
             }, where:{
                 user_id: id
