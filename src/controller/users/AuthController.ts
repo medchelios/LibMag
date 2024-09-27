@@ -51,11 +51,11 @@ export const UserLogin = async (req: Request, res: Response) => {
         }
         // Check if user is already in the system with either username or email
         const isUserExists = await userRepository.findOne({
-            select: { email: true, username: true, password: true, user_id: true }, where: {
+            select: { email: true, username: true, password: true, user_id: true, role: true }, where: {
                 email: userid
             }
         }) || await userRepository.findOne({
-            select: { email: true, username: true, password: true , user_id: true}, where: {
+            select: { email: true, username: true, password: true , user_id: true, role: true}, where: {
                 username: userid
             }
         })
@@ -67,7 +67,7 @@ export const UserLogin = async (req: Request, res: Response) => {
         if (!isHashedPassword) {return res.status(400).json({success: false, message: "wrong password or userid" })}
         
         // create jwt token
-        let user = {id: isUserExists.user_id, email: isUserExists.email, username:isUserExists.username}
+        let user = {id: isUserExists.user_id, email: isUserExists.email, username:isUserExists.username, role: isUserExists.role}
         const token = jwt.sign(user, jwtSecretKey, { expiresIn: '30m'});
         
         return res.status(200).json({
