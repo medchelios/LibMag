@@ -1,7 +1,3 @@
-// POST /books: Add a new book (admin only).
-// PUT /books/{id}: Update a book by ID (admin only).
-// DELETE /books/{id}: Delete a book by ID (admin only).
-
 import { BookEntity } from "../../entity/BookEntity"
 import { AppDataSource } from "../../data-source"
 import { Response, Request } from "express"
