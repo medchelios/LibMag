@@ -12,11 +12,11 @@ export class FinesEntity {
 
     @Column()
     @OneToOne(() => UserEntity)
-    user_id!: number
+    user_id!: string
 
     @Column()
     @OneToOne(() => BorrowedBookEntity)
-    borrow_id!: number
+    borrow_id!: string
 
     @Column({type: 'decimal', precision: 10, scale: 2, default: 0.0, transformer: new DecimalTransformer() })
     @Transform(DecimalToString(), { toPlainOnly: true })

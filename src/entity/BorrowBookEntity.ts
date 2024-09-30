@@ -10,11 +10,11 @@ export class BorrowedBookEntity {
 
     @Column()
     @OneToOne(() => UserEntity)
-    user_id!: number
+    user_id!: string
 
     @Column()
     @OneToOne(() => BookEntity)
-    book_id!: number
+    book_id!: string
 
     @Column()
     borrow_date!: Date
