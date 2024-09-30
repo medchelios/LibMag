@@ -23,13 +23,13 @@ export const BorrowBook = async (req: Request, res: Response) => {
             return res.status(400).json({ success: false, message: "book not available" });
         }
         // if available create borrow record and deduct available copies
-        let record = {
-    user_id: "number",
-    book_id: "D",
-    borrow_date: Date,
-    return_date: Date,
-    status: "borrowed"
-}
+        const newRecord = borrowBookRepository.create({
+            user_id: req.body.user.id,
+            book_id: fetchBook.book_id,
+            borrow_date: new Date,
+            status: "borrowed"
+        })
+        const bookBorrow = await borrowBookRepository.save(newRecord)
         
     } catch (error) {
         console.error(error)
