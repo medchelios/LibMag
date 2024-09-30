@@ -11,9 +11,9 @@ const borrowBookRepository = AppDataSource.getRepository(BorrowedBookEntity)
 
 export const BorrowBook = async (req: Request, res: Response) => {
     try {
-        const {id} = req.params
+        const {book_id} = req.body
         // check if book exists
-        const fetchBook = await bookRepository.findOneBy({book_id:id})
+        const fetchBook = await bookRepository.findOneBy({book_id:book_id})
 
         if (!fetchBook){
             return res.status(400).json({ success: false, message: "error fetching book" });
@@ -29,8 +29,11 @@ export const BorrowBook = async (req: Request, res: Response) => {
             borrow_date: new Date,
             status: "borrowed"
         })
+        let newAvailableCopies = fetchBook.available_copies - 1
         const bookBorrow = await borrowBookRepository.save(newRecord)
-        
+        const updatedBook = await bookRepository.update({book_id:book_id}, {available_copies:newAvailableCopies })
+
+        return res.status(200).json({ success: true, message: "Booking success", data: bookBorrow});
     } catch (error) {
         console.error(error)
         return res.status(500).json({ success: false, message: "An error occurred." });
