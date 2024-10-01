@@ -5,6 +5,7 @@ import {BorrowedBookEntity} from "./BorrowBookEntity"
 import {DecimalTransformer, DecimalToString} from "../utils/DecimalConverter"
 import Decimal from "decimal.js"
 
+export type Status = "paid"| "unpaid"
 @Entity("fines")
 export class FinesEntity {
     @PrimaryGeneratedColumn("uuid")
@@ -22,8 +23,15 @@ export class FinesEntity {
     @Transform(DecimalToString(), { toPlainOnly: true })
     fine_amount!: Decimal;
 
-    @Column({})
+    @Column()
     due_date!: Date
+
+    @Column({
+        type: "enum",
+        enum: ["paid", "unpaid"],
+        default: "unpaid"
+    })
+    payment_status!: Status
 }
 
 /*

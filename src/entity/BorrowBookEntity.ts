@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from "typeorm"
 import {UserEntity} from "./UserEntity"
 import {BookEntity} from "./BookEntity"
 
-export type Status = "borrowed"| "returned"
+export type Status = "borrowed"| "returned" | "pending"
 @Entity("borrowedbook")
 export class BorrowedBookEntity {
     @PrimaryGeneratedColumn("uuid")
@@ -24,7 +24,7 @@ export class BorrowedBookEntity {
 
     @Column({
         type: "enum",
-        enum: ["borrowed", "returned"],
+        enum: ["borrowed", "returned", "pending"],
         default: "borrowed"
     })
     status!: Status
