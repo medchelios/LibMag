@@ -1,6 +1,3 @@
-// POST /borrow: Borrow a book.
-// POST /return: Return a borrowed book.
-// POST /renew: Renew a borrowed book.
 import { BookEntity } from "../../entity/BookEntity"
 import { BorrowedBookEntity } from "../../entity/BorrowBookEntity"
 import { AppDataSource } from "../../data-source"
@@ -34,6 +31,59 @@ export const BorrowBook = async (req: Request, res: Response) => {
         const updatedBook = await bookRepository.update({book_id:book_id}, {available_copies:newAvailableCopies })
 
         return res.status(200).json({ success: true, message: "Booking success", data: bookBorrow});
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({ success: false, message: "An error occurred." });
+    }
+}
+
+export const ReturnBook = async (req: Request, res: Response) => {
+    try {
+        const {record_id} = req.body
+        // check if book exists
+        const fetchBookRecord = await borrowBookRepository.findOneBy({record_id:record_id})
+
+        if (!fetchBookRecord){
+            return res.status(400).json({ success: false, message: "error fetching record" });
+        }
+    
+        
+        let newRecord: any = {
+            return_date: new Date,
+            status: "pending"
+        }
+       
+        await borrowBookRepository.update({
+            record_id:record_id}, newRecord)
+
+        return res.status(200).json({ success: true, message: "Booking return processing"});
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({ success: false, message: "An error occurred." });
+    }
+}
+
+export const RenewBook = async (req: Request, res: Response) => {
+    try {
+        const {record_id} = req.body
+        // check if book exists
+        const fetchBookRecord = await borrowBookRepository.findOneBy({record_id:record_id})
+
+        if (!fetchBookRecord){
+            return res.status(400).json({ success: false, message: "error fetching record" });
+        }
+        
+        if (fetchBookRecord.status == "pending" || fetchBookRecord.status == "returned"){
+            return res.status(400).json({ success: false, message: "cannot renew. Book already returned" });
+        }
+        
+       
+        await borrowBookRepository.update({
+            record_id:record_id},  {
+                borrow_date: new Date
+            })
+
+        return res.status(200).json({ success: true, message: "Booking borrow date renewed"});
     } catch (error) {
         console.error(error)
         return res.status(500).json({ success: false, message: "An error occurred." });
