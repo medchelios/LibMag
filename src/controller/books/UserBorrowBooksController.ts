@@ -2,7 +2,11 @@ import { BookEntity } from "../../entity/BookEntity"
 import { BorrowedBookEntity } from "../../entity/BorrowBookEntity"
 import { AppDataSource } from "../../data-source"
 import { Response, Request } from "express"
+import { classToPlain, instanceToPlain } from "class-transformer";
+import { UserEntity } from "../../entity/UserEntity"
 
+
+const userRepository = AppDataSource.getRepository(UserEntity)
 const bookRepository = AppDataSource.getRepository(BookEntity)
 const borrowBookRepository = AppDataSource.getRepository(BorrowedBookEntity)
 
@@ -19,10 +23,17 @@ export const BorrowBook = async (req: Request, res: Response) => {
         if (fetchBook.available_copies < 1){
             return res.status(400).json({ success: false, message: "book not available" });
         }
+
+         // Fetch the user entity
+         const fetchUser = await userRepository.findOneBy({ user_id: req.body.user.id });
+         if (!fetchUser) {
+             return res.status(400).json({ success: false, message: "Error fetching user" });
+         }
+ 
         // if available create borrow record and deduct available copies
         const newRecord = borrowBookRepository.create({
-            user_id: req.body.user.id,
-            book_id: fetchBook.book_id,
+            user: fetchUser,
+            book: fetchBook,
             borrow_date: new Date,
             status: "borrowed"
         })
@@ -30,7 +41,14 @@ export const BorrowBook = async (req: Request, res: Response) => {
         const bookBorrow = await borrowBookRepository.save(newRecord)
         const updatedBook = await bookRepository.update({book_id:book_id}, {available_copies:newAvailableCopies })
 
-        return res.status(200).json({ success: true, message: "Booking success", data: bookBorrow});
+        return res.status(200).json({ 
+            success: true, 
+            message: "Booking success", 
+            data: {
+                ...instanceToPlain(bookBorrow),
+                book: {...fetchBook}
+            }
+        });
     } catch (error) {
         console.error(error)
         return res.status(500).json({ success: false, message: "An error occurred." });

@@ -1,24 +1,15 @@
 import { UserEntity } from "../../entity/UserEntity"
 import { AppDataSource } from "../../data-source"
 import { Response, Request } from "express"
+import { instanceToPlain } from "class-transformer"
 
 const userRepository = AppDataSource.getRepository(UserEntity)
 
 export const GetUserProfile = async (req: Request, res: Response) => {
     try {
         const {id} = req.body.user
-        // The select statement isn't scalable but it's the easiest solution
         const fetchUser = await userRepository.findOne({
-            select:{
-                user_id: true,
-                username: true,
-                first_name: true,
-                last_name: true,
-                email: true,
-                address:true,
-                contact:true,
-                sign_up_date: true
-            }, where:{
+            where:{
                 user_id: id
             }})
 
@@ -26,7 +17,7 @@ export const GetUserProfile = async (req: Request, res: Response) => {
             return res.status(400).json({ success: false, message: "error fetching profile" });
         }
 
-        return res.status(200).json({ success: true, message: "fetch success", data: fetchUser});
+        return res.status(200).json({ success: true, message: "fetch success", data: {...instanceToPlain(fetchUser)}});
     } catch (error) {
         console.error(error);
         return res.status(500).json({ success: false, message: "An error occurred." });
