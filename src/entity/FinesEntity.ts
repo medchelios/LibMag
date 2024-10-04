@@ -12,11 +12,11 @@ export class FinesEntity {
     @PrimaryGeneratedColumn("uuid")
     fine_id!: string;
 
-    @ManyToOne(() => UserEntity)
+    @ManyToOne(() => UserEntity,  { onDelete: 'SET NULL' })
     @JoinColumn({ name: "user_id" })
     user!: UserEntity;  // Proper relationship with UserEntity
 
-    @ManyToOne(() => BorrowedBookEntity)
+    @ManyToOne(() => BorrowedBookEntity,  { onDelete: 'SET NULL' })
     @JoinColumn({ name: "borrow_id" })
     borrowedBook!: BorrowedBookEntity;  // Proper relationship with BorrowedBookEntity
 
