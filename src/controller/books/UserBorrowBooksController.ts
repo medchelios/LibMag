@@ -2,7 +2,7 @@ import { BookEntity } from "../../entity/BookEntity"
 import { BorrowedBookEntity } from "../../entity/BorrowBookEntity"
 import { AppDataSource } from "../../data-source"
 import { Response, Request } from "express"
-import { classToPlain, instanceToPlain } from "class-transformer";
+import { instanceToPlain } from "class-transformer";
 import { UserEntity } from "../../entity/UserEntity"
 
 

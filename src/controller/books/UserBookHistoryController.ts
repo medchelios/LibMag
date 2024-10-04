@@ -6,7 +6,7 @@ import { BorrowedBookEntity } from "../../entity/BorrowBookEntity"
 import { AppDataSource } from "../../data-source"
 import { Response, Request } from "express"
 import { UserEntity } from "../../entity/UserEntity"
-
+import { instanceToPlain } from "class-transformer";
 
 const userRepository = AppDataSource.getRepository(UserEntity)
 
@@ -30,11 +30,31 @@ export const RetrieveUserBorrowHistory = async (req: Request, res: Response) => 
             take: perPage
         })
         
-        return res.status(200).json({ 
+        return res.status(200).json({
+            success: true, 
+            message: "fetched user borrow history", 
             data: userHistory, 
             total, 
             page, 
             last_page: Math.ceil(total / perPage)})
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({ success: false, message: "An error occurred." });
+    }
+}
+
+export const GetUserFines = async (req: Request, res: Response) => {
+    try {
+        const fetchUser = await userRepository.findOneBy({ user_id: req.body.user.id });
+        if (!fetchUser) {
+            return res.status(400).json({ success: false, message: "Error fetching user" });
+        }
+
+        const userFines = await finesRepository.find({where:{user: fetchUser}})
+        return res.status(200).json({
+            success: true, 
+            message: "fetched user borrow history", 
+            data: {...instanceToPlain(userFines)}})
     } catch (error) {
         console.error(error)
         return res.status(500).json({ success: false, message: "An error occurred." });
