@@ -1,12 +1,8 @@
-// GET /history: Retrieve borrowing history.
-// GET /fines: Retrieve and pay fines.
-import { BookEntity } from "../../entity/BookEntity"
 import { FinesEntity } from "../../entity/FinesEntity"
 import { BorrowedBookEntity } from "../../entity/BorrowBookEntity"
 import { AppDataSource } from "../../data-source"
 import { Response, Request } from "express"
 import { UserEntity } from "../../entity/UserEntity"
-import { instanceToPlain } from "class-transformer";
 
 const userRepository = AppDataSource.getRepository(UserEntity)
 
@@ -16,9 +12,9 @@ const borrowBookRepository = AppDataSource.getRepository(BorrowedBookEntity)
 export const RetrieveUserBorrowHistory = async (req: Request, res: Response) => {
     try {
         const fetchUser = await userRepository.findOneBy({ user_id: req.body.user.id });
-         if (!fetchUser) {
-             return res.status(400).json({ success: false, message: "Error fetching user" });
-         }
+        if (!fetchUser) {
+            return res.status(400).json({ success: false, message: "Error fetching user" });
+        }
         const page: number = parseInt(req.query.page as string) || 1
         const perPage = 5
         const total = await borrowBookRepository.count({where:{user:fetchUser}})
@@ -37,26 +33,46 @@ export const RetrieveUserBorrowHistory = async (req: Request, res: Response) => 
             total, 
             page, 
             last_page: Math.ceil(total / perPage)})
+        } catch (error) {
+            console.error(error)
+            return res.status(500).json({ success: false, message: "An error occurred." });
+        }
+    }
+    
+
+    export const GetUserFines = async (req: Request, res: Response) => {
+        try {
+            const fetchUser = await userRepository.findOneBy({ user_id: req.body.user.id });
+            if (!fetchUser) {
+                return res.status(400).json({ success: false, message: "Error fetching user" });
+            }
+            
+            const userFines = await finesRepository.find({where:{user: fetchUser}})
+            return res.status(200).json({
+                success: true, 
+                message: "fetched user fines history", 
+                data: userFines})
     } catch (error) {
         console.error(error)
         return res.status(500).json({ success: false, message: "An error occurred." });
     }
 }
 
-export const GetUserFines = async (req: Request, res: Response) => {
+export const GetSingleFineForUser = async (req: Request, res: Response) => {
     try {
+        const {id} = req.params
         const fetchUser = await userRepository.findOneBy({ user_id: req.body.user.id });
         if (!fetchUser) {
             return res.status(400).json({ success: false, message: "Error fetching user" });
         }
-
-        const userFines = await finesRepository.find({where:{user: fetchUser}})
+        
+        const userFines = await finesRepository.findOne({where:{fine_id: id}})
         return res.status(200).json({
             success: true, 
-            message: "fetched user borrow history", 
-            data: {...instanceToPlain(userFines)}})
-    } catch (error) {
-        console.error(error)
-        return res.status(500).json({ success: false, message: "An error occurred." });
-    }
+            message: "fetched user fine", 
+            data: userFines})
+} catch (error) {
+    console.error(error)
+    return res.status(500).json({ success: false, message: "An error occurred." });
+}
 }
