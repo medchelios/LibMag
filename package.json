@@ -9,7 +9,7 @@
     "dev": "nodemon src/index.ts",
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:run": "npx typeorm-ts-node-commonjs migration:run -d ./src/data-source.ts",
-    "populate": "ts-node commands/populate.ts"
+    "populate": "ts-node ./src/commands/populate.ts"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "class-validator": "^0.14.1",
     "concurrently": "^9.0.1",
     "cors": "^2.8.5",
+    "croner": "^8.1.2",
     "decimal.js": "^10.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",

@@ -1,8 +1,8 @@
-import {initializeDB} from '../src/data-source'
-import { BookEntity } from "../src/entity/BookEntity"
-import { AppDataSource } from "../src/data-source"
+import {initializeDB} from '../data-source'
+import { BookEntity } from "../entity/BookEntity"
+import { AppDataSource } from "../data-source"
 import { faker } from '@faker-js/faker';
-import { createConnection } from 'typeorm';
+
 
 
  initializeDB().then(async (conn: any) => {
