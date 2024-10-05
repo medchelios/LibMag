@@ -3,6 +3,7 @@ import { GetAllUsers,GetSingleUser, UpdateUserDetails, DeleteSingleUser } from "
 import { Router } from "express"
 import { VerifyJwtToken } from "../middleware/JwtMiddleware";
 import { IsAdminRole } from "../middleware/AdminMiddleware";
+import { ApproveBookReturn, RetrieveAllBorrowHistory } from "../controller/admin/AdminBorrowBookController";
 
 const router = Router();
 
@@ -16,6 +17,10 @@ router.get("/users", VerifyJwtToken, IsAdminRole, GetAllUsers)
 router.get("/users/:id", VerifyJwtToken, IsAdminRole, GetSingleUser)
 router.put("/users/:id", VerifyJwtToken, IsAdminRole, UpdateUserDetails)
 router.delete("/users/:id", VerifyJwtToken, IsAdminRole, DeleteSingleUser)
+
+// Borrow Books Route
+router.get("/history", VerifyJwtToken, IsAdminRole, RetrieveAllBorrowHistory)
+router.put("/approve/:id", VerifyJwtToken, IsAdminRole, ApproveBookReturn)
 
 
 export default router
