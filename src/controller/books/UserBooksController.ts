@@ -27,6 +27,8 @@ export const GetAllBooks = async (req: Request, res: Response) => {
     builder.offset((page - 1) * perPage).limit(perPage)
 
     return res.status(200).json({
+        success: true, 
+        message: "fetched all books",
         data: await builder.getMany(), 
         total, 
         page, 
