@@ -1,7 +1,11 @@
 import { BookEntity } from "../../entity/BookEntity"
 import { AppDataSource } from "../../data-source"
 import { Response, Request } from "express"
+import Redis from "ioredis";
 
+
+// Create a Redis client
+const redis: Redis = new Redis();
 const bookRepository = AppDataSource.getRepository(BookEntity)
 
 export const GetAllBooks = async (req: Request, res: Response) => {
@@ -25,7 +29,7 @@ export const GetAllBooks = async (req: Request, res: Response) => {
     const total = await builder.getCount()
 
     builder.offset((page - 1) * perPage).limit(perPage)
-
+    // await redis.set('cachedData', JSON.stringify(builder.getMany()), 'EX', 3600); // Cache for 1 hour
     return res.status(200).json({
         success: true, 
         message: "fetched all books",
@@ -45,7 +49,7 @@ export const GetBookById = async (req: Request, res: Response) => {
         const {id} = req.params
         const bookData = await bookRepository.findOneBy({book_id:id})
         if (!bookData) return res.status(400).json({ success: false, message: "Book Not Found" });
-
+        // await redis.set('cachedData', JSON.stringify(bookData), 'EX', 3600); // Cache for 1 hour
         return res.status(200).json({ 
             success: true, 
             message: "Book found",
