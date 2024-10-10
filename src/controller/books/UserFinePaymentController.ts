@@ -6,7 +6,6 @@ import { PaymentEntity } from "../../entity/PaymentEntity";
 import { AppDataSource } from "../../data-source"
 import { paystackSecretKey } from "../../config"
 import { UserEntity } from "../../entity/UserEntity"
-
 const userRepository = AppDataSource.getRepository(UserEntity)
 const finesRepository = AppDataSource.getRepository(FinesEntity)
 const paymentRepository = AppDataSource.getRepository(PaymentEntity)
@@ -71,11 +70,17 @@ export const PaymentWebhookVerification = async (req: Request, res: Response) =>
     // Retrieve the request's body
     const event = req.body;
     // Do something with event
-    const checkIfReferenceExists: any = await paymentRepository.findOneBy({reference: event.data?.reference})
+    const checkIfReferenceExists: any = await paymentRepository.findOne({
+      where: { reference: event.data.reference },
+      relations: ['fine'] // Ensure the 'fine' relation is loaded
+  });
+  
     if(!checkIfReferenceExists) {res.send(400)}
-    await finesRepository.update({fine_id: checkIfReferenceExists?.fine}, {payment_status: "paid", payment_date: new Date}) 
+    const getFineRecord = await finesRepository.findOneBy({fine_id: checkIfReferenceExists.fine.fine_id})
+    
+    await finesRepository.update({fine_id: checkIfReferenceExists.fine.fine_id}, {payment_status: "paid", payment_date: new Date}) 
     }
-    res.send(200);
+    res.sendStatus(200);
     } catch (error) {
         // Handle any errors that occur during the request
         console.error(error);

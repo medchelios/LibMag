@@ -7,6 +7,6 @@ import { VerifyJwtToken } from "../middleware/JwtMiddleware";
 const router = Router();
 
 router.post("/",VerifyJwtToken, PayFine);
-router.post("/webhook",VerifyJwtToken, PaymentWebhookVerification);
+router.post("/webhook", PaymentWebhookVerification);
 
 export default router

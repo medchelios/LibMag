@@ -38,9 +38,9 @@ export class FinesEntity {
     @Column({ nullable: true })
     payment_date!: Date;
 
-       // Correct inverse relationship to PaymentEntity
+        // One-to-one relationship with PaymentEntity (corrected to singular reference)
     @OneToOne(() => PaymentEntity, (payment) => payment.fine)
-    payments!: PaymentEntity[];
+    payment!: PaymentEntity;
 }
 
 
