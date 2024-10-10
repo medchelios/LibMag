@@ -5,6 +5,7 @@ import { UserEntity } from "./entity/UserEntity";
 import { BookEntity } from "./entity/BookEntity";
 import { BorrowedBookEntity } from "./entity/BorrowBookEntity";
 import { FinesEntity } from "./entity/FinesEntity";
+import { PaymentEntity } from "./entity/PaymentEntity";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
     database: dbName,
     synchronize: true,
     logging: true,
-    entities: [UserEntity,BookEntity, BorrowedBookEntity, FinesEntity],
+    entities: [UserEntity,BookEntity, BorrowedBookEntity, FinesEntity, PaymentEntity],
     migrations: ["./src/migrations/*.ts"]
 })
 

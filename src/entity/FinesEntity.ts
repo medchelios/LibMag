@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { Transform } from "class-transformer";
 import { UserEntity } from "./UserEntity";
+import { PaymentEntity } from "./PaymentEntity";
 import { BorrowedBookEntity } from "./BorrowBookEntity";
 import { DecimalTransformer, DecimalToString } from "../utils/DecimalConverter";
 import Decimal from "decimal.js";
@@ -24,7 +25,7 @@ export class FinesEntity {
     @Transform(DecimalToString(), { toPlainOnly: true })
     fine_amount!: Decimal;
 
-    @Column()
+    @Column({ nullable: true })
     due_date!: Date;
 
     @Column({
@@ -33,6 +34,13 @@ export class FinesEntity {
         default: "unpaid"
     })
     payment_status!: Status;
+
+    @Column({ nullable: true })
+    payment_date!: Date;
+
+       // Correct inverse relationship to PaymentEntity
+    @OneToOne(() => PaymentEntity, (payment) => payment.fine)
+    payments!: PaymentEntity[];
 }
 
 

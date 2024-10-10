@@ -1,11 +1,11 @@
 import { BookEntity } from "../../entity/BookEntity"
 import { AppDataSource } from "../../data-source"
 import { Response, Request } from "express"
-import Redis from "ioredis";
+// import Redis from "ioredis";
 
 
 // Create a Redis client
-const redis: Redis = new Redis();
+// const redis: Redis = new Redis();
 const bookRepository = AppDataSource.getRepository(BookEntity)
 
 export const GetAllBooks = async (req: Request, res: Response) => {
