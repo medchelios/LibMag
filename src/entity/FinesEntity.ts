@@ -13,11 +13,11 @@ export class FinesEntity {
     @PrimaryGeneratedColumn("uuid")
     fine_id!: string;
 
-    @ManyToOne(() => UserEntity,  { onDelete: 'SET NULL' })
+    @ManyToOne(() => UserEntity, { onDelete: 'SET NULL' })
     @JoinColumn({ name: "user_id" })
     user!: UserEntity;  // Proper relationship with UserEntity
 
-    @ManyToOne(() => BorrowedBookEntity,  { onDelete: 'SET NULL' })
+    @ManyToOne(() => BorrowedBookEntity, { onDelete: 'SET NULL' })
     @JoinColumn({ name: "borrow_id" })
     borrowedBook!: BorrowedBookEntity;  // Proper relationship with BorrowedBookEntity
 
@@ -38,7 +38,7 @@ export class FinesEntity {
     @Column({ nullable: true })
     payment_date!: Date;
 
-        // One-to-one relationship with PaymentEntity (corrected to singular reference)
+    // One-to-one relationship with PaymentEntity (corrected to singular reference)
     @OneToOne(() => PaymentEntity, (payment) => payment.fine)
     payment!: PaymentEntity;
 }

@@ -8,7 +8,7 @@ export class PaymentEntity {
 
     @Column()
     reference!: string;
-    
+
     @OneToOne(() => FinesEntity, (fine) => fine.payment, { onDelete: 'SET NULL' })
     @JoinColumn({ name: "fine_id" })
     fine!: FinesEntity;

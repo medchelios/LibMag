@@ -1,7 +1,7 @@
 import { UserEntity } from "../../entity/UserEntity"
 import { AppDataSource } from "../../data-source"
 import { Response, Request } from "express"
-import { salt,jwtSecretKey } from "../../config"
+import { salt, jwtSecretKey } from "../../config"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
@@ -55,7 +55,7 @@ export const UserLogin = async (req: Request, res: Response) => {
                 email: userid
             }
         }) || await userRepository.findOne({
-            select: { email: true, username: true, password: true , user_id: true, role: true}, where: {
+            select: { email: true, username: true, password: true, user_id: true, role: true }, where: {
                 username: userid
             }
         })
@@ -64,18 +64,18 @@ export const UserLogin = async (req: Request, res: Response) => {
         // password match check
         const isHashedPassword = bcrypt.compare(password, isUserExists.password)
 
-        if (!isHashedPassword) {return res.status(400).json({success: false, message: "wrong password or userid" })}
-        
+        if (!isHashedPassword) { return res.status(400).json({ success: false, message: "wrong password or userid" }) }
+
         // create jwt token
-        let user = {id: isUserExists.user_id, role: isUserExists.role}
-        const token = jwt.sign(user, jwtSecretKey, { expiresIn: '30m'});
-        
+        let user = { id: isUserExists.user_id, role: isUserExists.role }
+        const token = jwt.sign(user, jwtSecretKey, { expiresIn: '30m' });
+
         return res.status(200).json({
             success: true,
             message: "Login Success",
             token: token
         })
-          
+
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "An error occurred." });

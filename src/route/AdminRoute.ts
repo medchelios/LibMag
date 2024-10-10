@@ -1,5 +1,5 @@
 import { AddBookToDb, UpdateBookInDb, DeleteBookInDb } from "../controller/admin/AdminBooksController";
-import { GetAllUsers,GetSingleUser, UpdateUserDetails, DeleteSingleUser } from "../controller/admin/AdminUserController";
+import { GetAllUsers, GetSingleUser, UpdateUserDetails, DeleteSingleUser } from "../controller/admin/AdminUserController";
 import { Router } from "express"
 import { VerifyJwtToken } from "../middleware/JwtMiddleware";
 import { IsAdminRole } from "../middleware/AdminMiddleware";
@@ -8,7 +8,7 @@ import { ApproveBookReturn, RetrieveAllBorrowHistory } from "../controller/admin
 const router = Router();
 
 // Books Route
-router.post("/books",VerifyJwtToken, IsAdminRole, AddBookToDb);
+router.post("/books", VerifyJwtToken, IsAdminRole, AddBookToDb);
 router.put("/books/:id", VerifyJwtToken, IsAdminRole, UpdateBookInDb);
 router.delete("/books/:id", VerifyJwtToken, IsAdminRole, DeleteBookInDb);
 

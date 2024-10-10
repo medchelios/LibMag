@@ -1,4 +1,4 @@
-import { Router} from "express";
+import { Router } from "express";
 import auth from "./AuthRoute"
 import user from "./UserRoute"
 import book from "./BookRoute"
@@ -11,7 +11,7 @@ routes.use("/auth", auth);
 routes.use("/profile", user);
 routes.use("/books", book);
 routes.use("/admin", admin);
-routes.use("/",borrow)
-routes.use("/pay",payment)
+routes.use("/", borrow)
+routes.use("/pay", payment)
 
 export default routes;

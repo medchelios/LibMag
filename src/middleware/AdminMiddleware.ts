@@ -7,16 +7,17 @@ const userRepository = AppDataSource.getRepository(UserEntity)
 
 export const IsAdminRole = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const {id, role} = req.body.user
+        const { id, role } = req.body.user
         const fetchUser = await userRepository.findOne({
-            where:{
+            where: {
                 user_id: id
-            }})
+            }
+        })
 
-        if(!fetchUser){
+        if (!fetchUser) {
             return res.status(400).json({ success: false, message: "error fetching profile" });
         }
-        if (fetchUser.role == "customer"){
+        if (fetchUser.role == "customer") {
             return res.status(400).json({ success: false, message: "Unauthorized Access" });
         }
         next()
