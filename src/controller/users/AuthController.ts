@@ -2,6 +2,8 @@ import { UserEntity } from "../../entity/UserEntity"
 import { AppDataSource } from "../../data-source"
 import { Response, Request } from "express"
 import { salt, jwtSecretKey } from "../../config"
+import { WelcomeMessage } from "../../utils/HtmlEmailTemplate"
+import { SendEmail } from "../../services/EmailService"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
@@ -33,6 +35,7 @@ export const UserSignUp = async (req: Request, res: Response) => {
         })
         const saveUser = await userRepository.save(newUser)
 
+        await SendEmail(email,"Welcome to LibMag", WelcomeMessage(username))
         return res.status(201).json({ success: true, message: "Signup success." })
 
     } catch (error) {

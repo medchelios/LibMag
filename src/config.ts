@@ -13,3 +13,5 @@ export const dbHost = String(process.env.DB_HOST);
 export const salt = Number(process.env.SALT)
 export const jwtSecretKey = String(process.env.JWT_SECRET_KEY)
 export const paystackSecretKey = String(process.env.PAYSTACK_SECRET_KEY)
+export const senderEmail = String(process.env.NODEMAILER_EMAIL)
+export const senderPassword =  String(process.env.NODEMAILER_PASSWORD)
