@@ -1,4 +1,4 @@
-import {UserSignUp, UserLogin} from "../controller/users/AuthController"
+import { UserSignUp, UserLogin } from "../controller/users/AuthController"
 import { Router } from "express"
 
 

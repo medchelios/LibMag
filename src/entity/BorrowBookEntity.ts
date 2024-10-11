@@ -9,11 +9,11 @@ export class BorrowedBookEntity {
     @PrimaryGeneratedColumn("uuid")
     record_id!: string;
 
-    @ManyToOne(() => UserEntity, (user) => user.borrowedBooks,  { onDelete: 'SET NULL' })
+    @ManyToOne(() => UserEntity, (user) => user.borrowedBooks, { onDelete: 'SET NULL' })
     @JoinColumn({ name: "user_id" })
     user!: UserEntity;  // Proper ManyToOne relationship for user
 
-    @ManyToOne(() => BookEntity, (book) => book.borrowedBooks,  { onDelete: 'SET NULL' })
+    @ManyToOne(() => BookEntity, (book) => book.borrowedBooks, { onDelete: 'SET NULL' })
     @JoinColumn({ name: "book_id" })
     book!: BookEntity;  // Proper ManyToOne relationship for book
 

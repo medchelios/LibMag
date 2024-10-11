@@ -60,7 +60,7 @@ export const VerifyJwtToken = async (req: Request, res: Response, next: NextFunc
                 message: "Invalid token",
             });
         }
-    
+
         return res.status(500).send({
             success: false,
             message: "An internal server error occurred",

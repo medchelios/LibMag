@@ -26,20 +26,21 @@ export const AddBookToDb = async (req: Request, res: Response) => {
 
 export const UpdateBookInDb = async (req: Request, res: Response) => {
     try {
-        const {id} = req.params
+        const { id } = req.params
         const fetchBook = await bookRepository.exists({
-            where:{
+            where: {
                 book_id: id
-            }})
+            }
+        })
 
-        if (!fetchBook){
+        if (!fetchBook) {
             return res.status(400).json({ success: false, message: "error fetching book" });
         }
         // Destructure to exclude `user` field
         const { user, ...fieldsToUpdate } = req.body;
 
-        const updatedBook = await bookRepository.update({book_id:id}, fieldsToUpdate)
-        return res.status(200).json({ success: true, message: "book update success"});
+        const updatedBook = await bookRepository.update({ book_id: id }, fieldsToUpdate)
+        return res.status(200).json({ success: true, message: "book update success" });
     } catch (error) {
         console.error(error)
         return res.status(500).json({ success: false, message: "An error occurred." });
@@ -48,18 +49,19 @@ export const UpdateBookInDb = async (req: Request, res: Response) => {
 
 export const DeleteBookInDb = async (req: Request, res: Response) => {
     try {
-        const {id} = req.params
+        const { id } = req.params
         const fetchBook = await bookRepository.exists({
-            where:{
+            where: {
                 book_id: id
-            }})
+            }
+        })
 
-        if (!fetchBook){
+        if (!fetchBook) {
             return res.status(400).json({ success: false, message: "error fetching book" });
         }
 
-        await bookRepository.delete({book_id:id})
-        return res.status(200).json({ success: true, message: "book delete success"});
+        await bookRepository.delete({ book_id: id })
+        return res.status(200).json({ success: true, message: "book delete success" });
 
     } catch (error) {
         console.error(error)
